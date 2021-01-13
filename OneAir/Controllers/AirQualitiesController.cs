@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using OneAir.Models;
 
 namespace OneAir.Controllers
 {
+    //[EnableCorsAttribute("https://localhost:5001/api/airqualities", "*","*")]
     [Route("api/[controller]")]
     [ApiController]
     public class AirQualitiesController : ControllerBase
