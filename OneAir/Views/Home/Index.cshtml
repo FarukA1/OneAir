@@ -5,15 +5,24 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">OneAir Monitoring System</h1>
-    <p>Under Construction.</p>
-    <div id="demo"></div>
-    <div id="mapid"></div>
+    <h3 class="display-4">OneAir Monitoring System</h3>
+    @*<div id="demo"></div>*@
+    @*<div id="mapid"></div>*@
+</div>
+<div class="container" style="width:100%;">
+    <div class="row">
+        <div class="col-8">
+            <div id="mapid"></div>
+        </div>
+        <div class="col-4">
+            <div id="demo"></div>
+        </div>
+    </div>
 </div>
 
 <style>
     #mapid {
-        height: 500px;
+        height: 600px;
     }
 </style>
 
@@ -22,13 +31,14 @@
         crossorigin=""></script>
 <script>
     async function getLocation() {
-        var x = document.getElementById("demo");
+        var location = document.getElementById("demo");
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 let lat = position.coords.latitude;
                 let long = position.coords.longitude;
 
-                x.innerHTML = "Your Location" + "<br>Latitude: " + position.coords.latitude +
+                location.innerHTML = "<h4>Your Location</h4>" + "<br>Latitude: " + position.coords.latitude +
                     "<br>Longitude: " + position.coords.longitude;
 
                 const mymap = L.map('mapid').setView([lat, long], 13);
@@ -52,7 +62,19 @@
 
                     for (var i = 0; i < data.length; ++i) {
 
+                        function getText(pM25) {
+
+                            return pM25 <= 50 ? 'Good' :
+                                pM25 <= 100 ? 'Moderate' :
+                                    pM25 <= 150 ? 'Unhealthy for Sensitive Groups' :
+                                        pM25 <= 200 ? 'Unhealthy' :
+                                            pM25 <= 300 ? 'Very Unhealthy' :
+                                                pM25 >= 301 ? 'Hazardous' :
+                                                    'Good';
+                        }
+
                         function getColor(pM25) {
+
                             return pM25 <= 50 ? '#00ff00' :
                                 pM25 <= 100 ? '#ffff00' :
                                     pM25 <= 150 ? '#ffa500' :
@@ -63,17 +85,62 @@
                         }
 
 
+                        function getImage(pM25) {
+
+                            @* passing image for pM2.5 between 0 - 50 *@
+                            var imgGood = document.createElement('img');
+                            imgGood.src = 'img/Good.png'
+
+                            @* passing image for pM2.5 between 51 - 100 *@
+                            var imgModerate = document.createElement('img');
+                            imgModerate.src = 'img/Moderate.png'
+
+                            @* passing image for pM2.5 between 101 - 150 *@
+                            var imgUnhealthySensitiveG = document.createElement('img');
+                            imgUnhealthySensitiveG.src = 'img/Unhealthy_Sensitive_Group.png'
+
+                            @* passing image for pM2.5 between 151 - 200 *@
+                            var imgUnhealthy = document.createElement('img');
+                            imgUnhealthy.src = 'img/Unhealthy.png'
+
+                            @* passing image for pM2.5 between 201 - 300 *@
+                            var imgVeryUnhealthy = document.createElement('img');
+                            imgVeryUnhealthy.src = 'img/Very_Unhealthy.png'
+
+                            @* passing image for pM2.5 between 301 - higher *@
+                            var imgHazadous = document.createElement('img');
+                            imgHazadous.src = 'img/Hazadous.png'
+
+                            return pM25 <= 50 ? imgGood.src :
+                                pM25 <= 100 ? imgModerate.src :
+                                    pM25 <= 150 ? imgUnhealthySensitiveG.src :
+                                        pM25 <= 200 ? imgUnhealthy.src :
+                                            pM25 <= 300 ? imgVeryUnhealthy.src :
+                                                pM25 >= 301 ? imgHazadous.src :
+                                        imgGood.src;
+                                
+                        }
+
+
+                        
+
+
                         L.circle([data[i].latitude, data[i].longitude], { color: getColor(data[i].pM25)})
                             .bindPopup(
-                                '<h3 style="float:center;"> AirQuality Information</h3>' + '<br>' +
-                                '<p style="font-size:12px;"> DeviceID: ' + data[i].deviceID + '</p>' +
-                                '<p style="font-size:12px;"> Time: ' + data[i].time + '</p>' +
-                                '<p style="font-size:12px;"> Latitude: ' + data[i].latitude + '</p>' +
-                                '<p style="font-size:12px;"> Lomgitude: ' + data[i].longitude + '</p>' +
-                                '<p style="font-size:12px;"> pM10: ' + data[i].pM10 + '</p>' +
-                                '<p style="font-size:12px;"> pM2.5: ' + data[i].pM25 + '</p>'
+                                '<h3 class="text-center"> AirQuality Information</h3>' +
+                                '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(data[i].pM25) + '>' +
+                                '<div' + ' style="background-color:' + getColor(data[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                                '<h4>' + getText(data[i].pM25) + '</h4>' +
+                                '</div>' +
+                                '<div>' +
+                                '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + data[i].deviceID + '</p>' +
+                                '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + data[i].time + '</p>' +
+                                '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + data[i].latitude + '</p>' +
+                                '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + data[i].longitude + '</p>' +
+                                '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + data[i].pM10 + '</p>' +
+                                '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + data[i].pM25 + '</p>' +
+                                '</div>'
                                 )
-                            @*.bindPopup(data[i].latitude)*@
                             .addTo(mymap);
                     }
                     
@@ -91,7 +158,7 @@
                     .addTo(mymap);
             });
         } else {
-            x.innerHTML = "Geolocation is not supported by this browser.";
+            location.innerHTML = "Geolocation is not supported by this browser.";
         }
     }
     getLocation();

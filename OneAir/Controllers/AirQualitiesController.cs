@@ -10,7 +10,6 @@ using OneAir.Models;
 
 namespace OneAir.Controllers
 {
-    //[EnableCorsAttribute("https://localhost:5001/api/airqualities", "*","*")]
     [Route("api/[controller]")]
     [ApiController]
     public class AirQualitiesController : ControllerBase
