@@ -6,18 +6,8 @@
 
 <div class="text-center">
     <h3 class="display-4">OneAir Monitoring System</h3>
-    @*<div id="demo"></div>*@
-    @*<div id="mapid"></div>*@
-</div>
-<div class="container" style="width:100%;">
-    <div class="row">
-        <div class="col-8">
-            <div id="mapid"></div>
-        </div>
-        <div class="col-4">
-            <div id="demo"></div>
-        </div>
-    </div>
+    <div id="demo"></div>
+    <div id="mapid"></div>
 </div>
 
 <style>
@@ -30,15 +20,17 @@
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
 <script>
+
     async function getLocation() {
         var location = document.getElementById("demo");
 
+        @* Adapted from w3schools (w3schools, n.d.) *@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 let lat = position.coords.latitude;
                 let long = position.coords.longitude;
 
-                location.innerHTML = "<h4>Your Location</h4>" + "<br>Latitude: " + position.coords.latitude +
+                location.innerHTML = "<h4>Your Location</h4>" + "Latitude: " + position.coords.latitude +
                     "<br>Longitude: " + position.coords.longitude;
 
                 const mymap = L.map('mapid').setView([lat, long], 13);
@@ -62,6 +54,19 @@
 
                     for (var i = 0; i < data.length; ++i) {
 
+                        function getColor(pM25) {
+
+                            @*Adapted from Leaflet (Leaflet, n.d.)*@
+                            return pM25 <= 50 ? '#00ff00' :
+                                pM25 <= 100 ? '#ffff00' :
+                                    pM25 <= 150 ? '#ffa500' :
+                                        pM25 <= 200 ? '#ff0000' :
+                                            pM25 <= 300 ? '#800080' :
+                                                pM25 >= 301 ? '#800000' :
+                                                    '#000000';
+                        }
+
+
                         function getText(pM25) {
 
                             return pM25 <= 50 ? 'Good' :
@@ -71,17 +76,6 @@
                                             pM25 <= 300 ? 'Very Unhealthy' :
                                                 pM25 >= 301 ? 'Hazardous' :
                                                     'Good';
-                        }
-
-                        function getColor(pM25) {
-
-                            return pM25 <= 50 ? '#00ff00' :
-                                pM25 <= 100 ? '#ffff00' :
-                                    pM25 <= 150 ? '#ffa500' :
-                                        pM25 <= 200 ? '#ff0000' :
-                                            pM25 <= 300 ? '#800080' :
-                                                pM25 >= 301 ? '#800000' :
-                                                        '#000000';
                         }
 
 
@@ -118,16 +112,14 @@
                                             pM25 <= 300 ? imgVeryUnhealthy.src :
                                                 pM25 >= 301 ? imgHazadous.src :
                                         imgGood.src;
-                                
+
                         }
 
-
-                        
 
 
                         L.circle([data[i].latitude, data[i].longitude], { color: getColor(data[i].pM25)})
                             .bindPopup(
-                                '<h3 class="text-center"> AirQuality Information</h3>' +
+                                '<h3 class="text-center"> Location ' + data[i].airQualityID + ' Details</h3>' +
                                 '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(data[i].pM25) + '>' +
                                 '<div' + ' style="background-color:' + getColor(data[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
                                 '<h4>' + getText(data[i].pM25) + '</h4>' +
@@ -143,19 +135,11 @@
                                 )
                             .addTo(mymap);
                     }
-                    
+
                 }
                 getData();
 
-                @*testing data*@
-                var circle = L.circle([51.508, -0.11], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: 500
-                })
-                    .bindPopup('Welcome to OneAir')
-                    .addTo(mymap);
+
             });
         } else {
             location.innerHTML = "Geolocation is not supported by this browser.";
@@ -163,3 +147,10 @@
     }
     getLocation();
 </script>
+
+
+@*Leaflet. (n.d). Interactive Choropleth Map.
+    Retrieved from https://leafletjs.com/examples/choropleth/*@
+
+@*w3schools. (n.d). HTML Geolocation API.
+    Retrieved from https://www.w3schools.com/html/html5_geolocation.asp*@
