@@ -7,8 +7,9 @@
 
 <div class="container pt-3">
     <div class="text-center">
-        <h3 class="display-4">OneAir Monitoring System</h3>
-        <div id="demo"></div>
+        <h4 id="descri"></h4>
+        <div id="location"></div>
+        <div id="forecast"></div>
     </div>
 </div>
 
@@ -99,6 +100,9 @@
 
 <script>
 
+    var lat
+    var long
+
     var allMap;
     var allGood;
     var allModerate;
@@ -108,19 +112,46 @@
     var allHazardous;
 
 async function getLocation() {
-    var location = document.getElementById("demo");
+    var location = document.getElementById("location");
 
-    @* Adapted from w3schools (w3schools, n.d.) *@
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            let lat = position.coords.latitude;
-            let long = position.coords.longitude;
+             lat = position.coords.latitude;
+             long = position.coords.longitude;
 
-            @*end of adapted code*@
 
-            location.innerHTML = "<h4>Your Location</h4>" + "Latitude: " + position.coords.latitude +
-                "<br>Longitude: " + position.coords.longitude;
+            location.innerHTML = "Latitude: " + lat + " & " +
+                "Longitude: " + long;
 
+            async function getForecast() {
+                var forecast = document.getElementById("forecast");
+                var descri = document.getElementById("descri");
+                const forecast_url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long + '&appid=e9b6e482aac44a3bb6a7639b8ab76ab0';
+
+                const response = await fetch(forecast_url);
+                const dataForecast = await response.json();
+                console.log(dataForecast);
+
+                function getIcons(icon) {
+                    return icon == "clear sky" ? 'https://openweathermap.org/img/wn/01n@2x.png' :
+                        icon == "few clouds" ? 'https://openweathermap.org/img/wn/02n@2x.png' :
+                            icon == "scattered clouds" ? 'https://openweathermap.org/img/wn/03n@2x.png' :
+                                icon == "broken clouds" ? 'https://openweathermap.org/img/wn/04n@2x.png' :
+                                    icon == "shower rain" ? 'https://openweathermap.org/img/wn/09n@2x.png' :
+                                        icon == "rain" ? 'https://openweathermap.org/img/wn/10n@2x.png' :
+                                            icon == "thunderstorm" ? 'https://openweathermap.org/img/wn/11n@2x.png' :
+                                                icon == "snow" ? 'https://openweathermap.org/img/wn/13n@2x.png' :
+                                                    icon == "mist" ? 'https://openweathermap.org/img/wn/50n@2x.png' :
+                                                        'https://openweathermap.org/img/wn/01n@2x.png';
+                }
+
+                for (var i = 0; i < dataForecast.weather.length; ++i) {
+                    forecast.innerHTML = '<div><img class="rounded mx-auto d-block" src="' + getIcons(dataForecast.weather[i].description) + '">'
+                    descri.innerHTML = '<h4>' + 'Current Forecast: ' + dataForecast.weather[i].description + '</h4>'
+                }
+
+            }
+            getForecast()
 
             allMap = L.map('mapid').setView([lat, long], 13);
             allGood = L.map('goodid').setView([lat, long], 13);
@@ -454,9 +485,6 @@ async function getLocation() {
                     series: [{
                         name: 'pM 2.5',
                         data: pm25Value
-                    }, {
-                        name: 'pM 10',
-                        data: pm10Value
                     }],
                     chart: {
                         height: 350,
@@ -710,6 +738,3 @@ async function getLocation() {
 
 @*Leaflet. (n.d). Interactive Choropleth Map.
     Retrieved from https://leafletjs.com/examples/choropleth/*@
-
-@*w3schools. (n.d). HTML Geolocation API.
-    Retrieved from https://www.w3schools.com/html/html5_geolocation.asp*@
