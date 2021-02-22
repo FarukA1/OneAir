@@ -2,32 +2,110 @@
 @model OneAir.Views.Home.IndexModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/site.css" />
 }
 
-<div class="text-center">
-    <h3 class="display-4">OneAir Monitoring System</h3>
-    <div id="demo"></div>
-    <div id="mapid"></div>
-    <div id="chart"></div>
+<div class="container pt-3">
+    <div class="text-center">
+        <h3 class="display-4">OneAir Monitoring System</h3>
+        <div id="demo"></div>
+    </div>
 </div>
+
+<div class="container pt-3">
+    <div class="row d-flex justify-content-center">
+        <button type="button" id="passmapid" onclick="passMap()" class="btn btn-success">Map</button>
+        <button type="button" id="passgraphid" onclick="passGraph()" class="btn btn-danger">Graph</button>
+    </div>
+</div>
+
+<div id="getMap">
+
+    <div class="container pt-3">
+        <div class="row d-flex justify-content-center">
+            <button type="button" onclick="getAllMap()" class="btn btn-outline-secondary">All</button>
+            <button type="button" onclick="getAllGood()" class="btn btn-outline-secondary">Good</button>
+            <button type="button" onclick="getAllModerate()" class="btn btn-outline-secondary">Moderate</button>
+            <button type="button" onclick="getAllUSG()" class="btn btn-outline-secondary">Sensitive Groups</button>
+            <button type="button" onclick="getAllUnhealthy()" class="btn btn-outline-secondary">Unhealthy</button>
+            <button type="button" onclick="getAllVeryUnhealthy()" class="btn btn-outline-secondary">Very Unhealthy</button>
+            <button type="button" onclick="getAllHazardous()" class="btn btn-outline-secondary">Hazardous</button>
+        </div>
+    </div>
+
+    <div class="container pt-3">
+        <div>
+            <div id="mapid"></div>
+            <div id="goodid"></div>
+            <div id="moderateid"></div>
+            <div id="usgid"></div>
+            <div id="unhealthyid"></div>
+            <div id="veryunhealthyid"></div>
+            <div id="hazardousid"></div>
+        </div>
+    </div>
+
+</div>
+
+<div id="getGraph">
+
+    <div class="container pt-3">
+        <div>
+            <div id="chart"></div>
+        </div>
+    </div>
+     
+</div>
+
 
 <style>
     #mapid {
         height: 600px;
     }
-    #chart {
+
+    #goodid {
+        height: 600px;
+    }
+
+    #moderateid {
+        height: 600px;
+    }
+
+    #usgid {
+        height: 600px;
+    }
+
+    #unhealthyid {
+        height: 600px;
+    }
+
+    #veryunhealthyid {
+        height: 600px;
+    }
+
+    #hazardousid {
+        height: 600px;
+    }
+
+    @*#chart {
         max-width: 1000px;
         margin: 35px auto;
-    }
+    }*@
 </style>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin="">
-
-</script>
+        crossorigin=""></script>
 
 <script>
+
+    var allMap;
+    var allGood;
+    var allModerate;
+    var allUSG;
+    var allUnhealthy;
+    var allVeryUnhealthy;
+    var allHazardous;
 
 async function getLocation() {
     var location = document.getElementById("demo");
@@ -44,7 +122,15 @@ async function getLocation() {
                 "<br>Longitude: " + position.coords.longitude;
 
 
-            const mymap = L.map('mapid').setView([lat, long], 13);
+            allMap = L.map('mapid').setView([lat, long], 13);
+            allGood = L.map('goodid').setView([lat, long], 13);
+            allModerate = L.map('moderateid').setView([lat, long], 13);
+            allUSG = L.map('usgid').setView([lat, long], 13);
+            allUnhealthy = L.map('unhealthyid').setView([lat, long], 13);
+            allVeryUnhealthy = L.map('veryunhealthyid').setView([lat, long], 13);
+            allHazardous = L.map('hazardousid').setView([lat, long], 13);
+
+
 
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -53,7 +139,61 @@ async function getLocation() {
                 tileSize: 512,
                 zoomOffset: -1,
                 accessToken: 'your.mapbox.access.token'
-            }).addTo(mymap);
+            }).addTo(allMap);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+            }).addTo(allGood);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+            }).addTo(allModerate);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+            }).addTo(allUSG);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+            }).addTo(allUnhealthy);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+            }).addTo(allVeryUnhealthy);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFydWthMSIsImEiOiJja2p2bGpic2YwYTFuMndzZHpjbXowdTFsIn0.w6ULN29W4Chm7-L37UwW5Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+            }).addTo(allHazardous);
 
             const api_url = 'https://oneair.1809152.win.studentwebserver.co.uk/api/airqualities';
 
@@ -132,7 +272,7 @@ async function getLocation() {
 
                 for (var i = 0; i < data.length; ++i) {
 
-                    var allData = L.circle([data[i].latitude, data[i].longitude], { color: getColor(data[i].pM25) })
+                    const allMapData = L.circle([data[i].latitude, data[i].longitude], { color: getColor(data[i].pM25) })
                         .bindPopup(
                             '<h3 class="text-center"> Location ' + data[i].airQualityID + ' Details</h3>' +
                             '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(data[i].pM25) + '>' +
@@ -148,9 +288,140 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + data[i].pM25 + '</p>' +
                             '</div>'
                         )
-                        @*.addTo(mymap);*@
 
-                    allData.addTo(mymap)
+                    allMapData.addTo(allMap)
+                }
+
+                for (var i = 0; i < good.length; ++i) {
+
+                    const allGoodData = L.circle([good[i].latitude, good[i].longitude], { color: getColor(good[i].pM25) })
+                        .bindPopup(
+                            '<h3 class="text-center"> Location ' + good[i].airQualityID + ' Details</h3>' +
+                            '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(good[i].pM25) + '>' +
+                            '<div' + ' style="background-color:' + getColor(good[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                            '<h4>' + getText(good[i].pM25) + ' - ' + good[i].pM25 + 'pM' + '</h4>' +
+                            '</div>' +
+                            '<div>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + good[i].deviceID + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + good[i].time + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + good[i].latitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + good[i].longitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + good[i].pM10 + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + good[i].pM25 + '</p>' +
+                            '</div>'
+                        )
+
+                    allGoodData.addTo(allGood);
+                }
+
+                for (var i = 0; i < moderate.length; ++i) {
+
+                    const allModerateData = L.circle([moderate[i].latitude, moderate[i].longitude], { color: getColor(moderate[i].pM25) })
+                        .bindPopup(
+                            '<h3 class="text-center"> Location ' + moderate[i].airQualityID + ' Details</h3>' +
+                            '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(moderate[i].pM25) + '>' +
+                            '<div' + ' style="background-color:' + getColor(moderate[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                            '<h4>' + getText(moderate[i].pM25) + ' - ' + moderate[i].pM25 + 'pM' + '</h4>' +
+                            '</div>' +
+                            '<div>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + moderate[i].deviceID + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + moderate[i].time + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + moderate[i].latitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + moderate[i].longitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + moderate[i].pM10 + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + moderate[i].pM25 + '</p>' +
+                            '</div>'
+                        )
+
+                    allModerateData.addTo(allModerate);
+                }
+
+                for (var i = 0; i < usg.length; ++i) {
+
+                    const allUSGData = L.circle([usg[i].latitude, usg[i].longitude], { color: getColor(usg[i].pM25) })
+                        .bindPopup(
+                            '<h3 class="text-center"> Location ' + usg[i].airQualityID + ' Details</h3>' +
+                            '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(usg[i].pM25) + '>' +
+                            '<div' + ' style="background-color:' + getColor(usg[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                            '<h4>' + getText(usg[i].pM25) + ' - ' + usg[i].pM25 + 'pM' + '</h4>' +
+                            '</div>' +
+                            '<div>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + usg[i].deviceID + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + usg[i].time + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + usg[i].latitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + usg[i].longitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + usg[i].pM10 + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + usg[i].pM25 + '</p>' +
+                            '</div>'
+                        )
+
+                    allUSGData.addTo(allUSG);
+                }
+
+                for (var i = 0; i < unhealthy.length; ++i) {
+
+                    const allUnhealthyData = L.circle([unhealthy[i].latitude, unhealthy[i].longitude], { color: getColor(unhealthy[i].pM25) })
+                        .bindPopup(
+                            '<h3 class="text-center"> Location ' + unhealthy[i].airQualityID + ' Details</h3>' +
+                            '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(unhealthy[i].pM25) + '>' +
+                            '<div' + ' style="background-color:' + getColor(unhealthy[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                            '<h4>' + getText(unhealthy[i].pM25) + ' - ' + unhealthy[i].pM25 + 'pM' + '</h4>' +
+                            '</div>' +
+                            '<div>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + unhealthy[i].deviceID + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + unhealthy[i].time + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + unhealthy[i].latitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + unhealthy[i].longitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + unhealthy[i].pM10 + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + unhealthy[i].pM25 + '</p>' +
+                            '</div>'
+                        )
+
+                    allUnhealthyData.addTo(allUnhealthy);
+                }
+
+                for (var i = 0; i < veryUnhealthy.length; ++i) {
+
+                    const allVeryUnhealthyData = L.circle([veryUnhealthy[i].latitude, veryUnhealthy[i].longitude], { color: getColor(veryUnhealthy[i].pM25) })
+                        .bindPopup(
+                            '<h3 class="text-center"> Location ' + veryUnhealthy[i].airQualityID + ' Details</h3>' +
+                            '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(veryUnhealthy[i].pM25) + '>' +
+                            '<div' + ' style="background-color:' + getColor(veryUnhealthy[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                            '<h4>' + getText(veryUnhealthy[i].pM25) + ' - ' + veryUnhealthy[i].pM25 + 'pM' + '</h4>' +
+                            '</div>' +
+                            '<div>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + veryUnhealthy[i].deviceID + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + veryUnhealthy[i].time + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + veryUnhealthy[i].latitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + veryUnhealthy[i].longitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + veryUnhealthy[i].pM10 + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + veryUnhealthy[i].pM25 + '</p>' +
+                            '</div>'
+                        )
+
+                    allVeryUnhealthyData.addTo(allVeryUnhealthy);
+                }
+
+                for (var i = 0; i < hazardous.length; ++i) {
+
+                    const allHazardousData = L.circle([hazardous[i].latitude, hazardous[i].longitude], { color: getColor(hazardous[i].pM25) })
+                        .bindPopup(
+                            '<h3 class="text-center"> Location ' + hazardous[i].airQualityID + ' Details</h3>' +
+                            '<img style="width:70%;display:block;margin-left:auto;margin-right:auto;" src=' + getImage(hazardous[i].pM25) + '>' +
+                            '<div' + ' style="background-color:' + getColor(hazardous[i].pM25) + ';text-align:center; border: 2px outset #000000;">' +
+                            '<h4>' + getText(hazardous[i].pM25) + ' - ' + hazardous[i].pM25 + 'pM' + '</h4>' +
+                            '</div>' +
+                            '<div>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> DeviceID: ' + hazardous[i].deviceID + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Time: ' + hazardous[i].time + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Latitude: ' + hazardous[i].latitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> Longitude: ' + hazardous[i].longitude + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + hazardous[i].pM10 + '</p>' +
+                            '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + hazardous[i].pM25 + '</p>' +
+                            '</div>'
+                        )
+
+                    allHazardousData.addTo(allHazardous);
                 }
 
             }
@@ -323,8 +594,119 @@ async function getLocation() {
 }
 
     getLocation();
+
 </script>
 
+<script>
+    document.getElementById("goodid").style.display = "none";
+    document.getElementById("moderateid").style.display = "none";
+    document.getElementById("usgid").style.display = "none";
+    document.getElementById("unhealthyid").style.display = "none";
+    document.getElementById("veryunhealthyid").style.display = "none";
+    document.getElementById("hazardousid").style.display = "none";
+
+    function getAllMap() {
+        document.getElementById("goodid").style.display = "none";
+        document.getElementById("moderateid").style.display = "none";
+        document.getElementById("usgid").style.display = "none";
+        document.getElementById("unhealthyid").style.display = "none";
+        document.getElementById("veryunhealthyid").style.display = "none";
+        document.getElementById("hazardousid").style.display = "none";
+
+        document.getElementById("mapid").style.display = "block";
+        allMap.invalidateSize();
+
+    }
+
+    function getAllGood() {
+        document.getElementById("mapid").style.display = "none";
+        document.getElementById("moderateid").style.display = "none";
+        document.getElementById("usgid").style.display = "none";
+        document.getElementById("unhealthyid").style.display = "none";
+        document.getElementById("veryunhealthyid").style.display = "none";
+        document.getElementById("hazardousid").style.display = "none";
+
+        document.getElementById("goodid").style.display = "block";
+        allGood.invalidateSize();
+    }
+
+    function getAllModerate() {
+        document.getElementById("mapid").style.display = "none";
+        document.getElementById("goodid").style.display = "none";
+        document.getElementById("usgid").style.display = "none";
+        document.getElementById("unhealthyid").style.display = "none";
+        document.getElementById("veryunhealthyid").style.display = "none";
+        document.getElementById("hazardousid").style.display = "none";
+
+        document.getElementById("moderateid").style.display = "block";
+        allModerate.invalidateSize();
+    }
+
+    function getAllUSG() {
+        document.getElementById("mapid").style.display = "none";
+        document.getElementById("goodid").style.display = "none";
+        document.getElementById("moderateid").style.display = "none";
+        document.getElementById("unhealthyid").style.display = "none";
+        document.getElementById("veryunhealthyid").style.display = "none";
+        document.getElementById("hazardousid").style.display = "none";
+
+        document.getElementById("usgid").style.display = "block";
+        allUSG.invalidateSize();
+    }
+
+    function getAllUnhealthy() {
+        document.getElementById("mapid").style.display = "none";
+        document.getElementById("goodid").style.display = "none";
+        document.getElementById("moderateid").style.display = "none";
+        document.getElementById("usgid").style.display = "none";
+        document.getElementById("veryunhealthyid").style.display = "none";
+        document.getElementById("hazardousid").style.display = "none";
+
+        document.getElementById("unhealthyid").style.display = "block";
+        allUnhealthy.invalidateSize();
+    }
+
+    function getAllVeryUnhealthy() {
+        document.getElementById("mapid").style.display = "none";
+        document.getElementById("goodid").style.display = "none";
+        document.getElementById("moderateid").style.display = "none";
+        document.getElementById("usgid").style.display = "none";
+        document.getElementById("unhealthyid").style.display = "none";
+        document.getElementById("hazardousid").style.display = "none";
+
+        document.getElementById("veryunhealthyid").style.display = "block";
+        allVeryUnhealthy.invalidateSize();
+    }
+
+    function getAllHazardous() {
+        document.getElementById("mapid").style.display = "none";
+        document.getElementById("goodid").style.display = "none";
+        document.getElementById("moderateid").style.display = "none";
+        document.getElementById("usgid").style.display = "none";
+        document.getElementById("unhealthyid").style.display = "none";
+        document.getElementById("veryunhealthyid").style.display = "none";
+
+        document.getElementById("hazardousid").style.display = "block";
+        allHazardous.invalidateSize();
+    }
+
+    document.getElementById("getGraph").style.display = "none";
+
+    function passGraph() {
+        document.getElementById("getMap").style.display = "none";
+        document.getElementById("getGraph").style.display = "block";
+        document.getElementById("passgraphid").disabled = true;
+        document.getElementById("passmapid").disabled = false;
+        
+    }
+
+    function passMap() {
+        document.getElementById("getGraph").style.display = "none";
+        document.getElementById("getMap").style.display = "block";
+        document.getElementById("passgraphid").disabled = false;
+        document.getElementById("passmapid").disabled = true;
+    }
+</script>
 
 @*Leaflet. (n.d). Interactive Choropleth Map.
     Retrieved from https://leafletjs.com/examples/choropleth/*@
