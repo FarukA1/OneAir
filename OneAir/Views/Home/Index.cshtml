@@ -646,6 +646,9 @@ async function getLocation() {
         document.getElementById("mapid").style.display = "block";
         allMap.invalidateSize();
 
+        document.getElementById('slider').value = "0";
+        document.querySelector('#volume').value = 0;
+
     }
 
     document.getElementById("getGraph").style.display = "none";
