@@ -15,6 +15,12 @@
 
 <div class="container pt-3">
     <div class="row d-flex justify-content-center">
+        <button type="button" id="refreshid" onclick="location.reload()" class="btn btn-outline-secondary">Refresh</button>
+    </div>
+</div>
+
+<div class="container pt-3">
+    <div class="row d-flex justify-content-center">
         <button type="button" id="passmapid" onclick="passMap()" class="btn btn-success">Map</button>
         <button type="button" id="passgraphid" onclick="passGraph()" class="btn btn-danger">Graph</button>
     </div>
@@ -617,7 +623,15 @@ async function getLocation() {
             }
             chart();
 
-        });
+        }, function (error) {
+                
+                location.innerHTML = "Require access to your location to view content of this page"
+                document.getElementById("refreshid").style.display = "block";
+                document.getElementById("getGraph").style.display = "none";
+                document.getElementById("getMap").style.display = "none";
+                document.getElementById("passmapid").style.display = "none";
+                document.getElementById("passgraphid").style.display = "none";
+        }, { timeout: 5000 });
     } else {
         location.innerHTML = "Geolocation is not supported by this browser.";
     }
@@ -634,6 +648,7 @@ async function getLocation() {
     document.getElementById("unhealthyid").style.display = "none";
     document.getElementById("veryunhealthyid").style.display = "none";
     document.getElementById("hazardousid").style.display = "none";
+    document.getElementById("refreshid").style.display = "none";
 
     function getAllMap() {
         document.getElementById("goodid").style.display = "none";
