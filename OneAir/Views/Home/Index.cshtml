@@ -133,6 +133,7 @@ async function getLocation() {
             async function getForecast() {
                 var forecast = document.getElementById("forecast");
                 var descri = document.getElementById("descri");
+
                 const forecast_url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long + '&appid=e9b6e482aac44a3bb6a7639b8ab76ab0';
 
                 const response = await fetch(forecast_url);
