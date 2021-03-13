@@ -15,11 +15,6 @@ var test;
 async function getLocation() {
     var location = document.getElementById("location");
 
-    function cookieGPS(position) {
-        document.cookie = "latitude=" + position.coords.latitude;
-        document.cookie = "longitude=" + position.coords.longitude;
-    }
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             lat = position.coords.latitude;
