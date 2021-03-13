@@ -1,0 +1,32 @@
+﻿#mapid {
+    height: 600px;
+}
+
+#goodid {
+    height: 600px;
+}
+
+#moderateid {
+    height: 600px;
+}
+
+#usgid {
+    height: 600px;
+}
+
+#unhealthyid {
+    height: 600px;
+}
+
+#veryunhealthyid {
+    height: 600px;
+}
+
+#hazardousid {
+    height: 600px;
+}
+
+#chart {
+    max-width: 1000px;
+    margin: 35px auto;
+}
