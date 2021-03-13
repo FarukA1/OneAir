@@ -1,6 +1,6 @@
 ﻿
-var lat
-var long
+var lat;
+var long;
 
 var allMap;
 var allGood;
@@ -9,8 +9,6 @@ var allUSG;
 var allUnhealthy;
 var allVeryUnhealthy;
 var allHazardous;
-
-var test;
 
 async function getLocation() {
     var location = document.getElementById("location");
@@ -47,12 +45,12 @@ async function getLocation() {
                 }
 
                 for (var i = 0; i < dataForecast.weather.length; ++i) {
-                    forecast.innerHTML = '<div><img class="rounded mx-auto d-block" src="' + getIcons(dataForecast.weather[i].description) + '">'
-                    descri.innerHTML = '<h4>' + 'Current Forecast: ' + dataForecast.weather[i].description + '</h4>'
+                    forecast.innerHTML = '<div><img class="rounded mx-auto d-block" src="' + getIcons(dataForecast.weather[i].description) + '">';
+                    descri.innerHTML = '<h4>' + 'Current Forecast: ' + dataForecast.weather[i].description + '</h4>';
                 }
 
             }
-            getForecast()
+            getForecast();
 
             allMap = L.map('mapid').setView([lat, long], 15);
             allGood = L.map('goodid').setView([lat, long], 15);
@@ -134,12 +132,12 @@ async function getLocation() {
                 const data = await response.json();
                 console.log(data);
 
-                const good = data.filter(x => x.pM25 <= 35)
-                const moderate = data.filter(x => x.pM25 >= 36 && x.pM25 <= 53)
-                const usg = data.filter(x => x.pM25 >= 54 && x.pM25 <= 58)
-                const unhealthy = data.filter(x => x.pM25 >= 59 && x.pM25 <= 64)
-                const veryUnhealthy = data.filter(x => x.pM25 >= 65 && x.pM25 <= 70)
-                const hazardous = data.filter(x => x.pM25 >= 71)
+                const good = data.filter(x => x.pM25 <= 35);
+                const moderate = data.filter(x => x.pM25 >= 36 && x.pM25 <= 53);
+                const usg = data.filter(x => x.pM25 >= 54 && x.pM25 <= 58);
+                const unhealthy = data.filter(x => x.pM25 >= 59 && x.pM25 <= 64);
+                const veryUnhealthy = data.filter(x => x.pM25 >= 65 && x.pM25 <= 70);
+                const hazardous = data.filter(x => x.pM25 >= 71);
 
                 function getColor(pM25) {
 
@@ -171,32 +169,32 @@ async function getLocation() {
                     //@* passing image for pM2.5 between 0 - 35 *@
 
                         var imgGood = document.createElement('img');
-                    imgGood.src = 'img/Good.png'
+                    imgGood.src = 'img/Good.png';
 
                     //@* passing image for pM2.5 between 36 - 53 *@
 
                         var imgModerate = document.createElement('img');
-                    imgModerate.src = 'img/Moderate.png'
+                    imgModerate.src = 'img/Moderate.png';
 
                     //@* passing image for pM2.5 between 54 - 58 *@
 
                         var imgUnhealthySensitiveG = document.createElement('img');
-                    imgUnhealthySensitiveG.src = 'img/Unhealthy_Sensitive_Group.png'
+                    imgUnhealthySensitiveG.src = 'img/Unhealthy_Sensitive_Group.png';
 
                     //@* passing image for pM2.5 between 59 - 64 *@
 
                         var imgUnhealthy = document.createElement('img');
-                    imgUnhealthy.src = 'img/Unhealthy.png'
+                    imgUnhealthy.src = 'img/Unhealthy.png';
 
                     //@* passing image for pM2.5 between 65 - 70 *@
 
                         var imgVeryUnhealthy = document.createElement('img');
-                    imgVeryUnhealthy.src = 'img/Very_Unhealthy.png'
+                    imgVeryUnhealthy.src = 'img/Very_Unhealthy.png';
 
                     //@* passing image for pM2.5 between 71 - higher *@
 
                         var imgHazadous = document.createElement('img');
-                    imgHazadous.src = 'img/Hazadous.png'
+                    imgHazadous.src = 'img/Hazadous.png';
 
                     return pM25 <= 35 ? imgGood.src :
                         pM25 <= 53 ? imgModerate.src :
@@ -227,9 +225,9 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + data[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + data[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
-                    allMapData.addTo(allMap)
+                    allMapData.addTo(allMap);
                 }
 
                 for (var i = 0; i < good.length; ++i) {
@@ -249,7 +247,7 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + good[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + good[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
                     allGoodData.addTo(allGood);
                 }
@@ -271,7 +269,7 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + moderate[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + moderate[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
                     allModerateData.addTo(allModerate);
                 }
@@ -293,7 +291,7 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + usg[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + usg[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
                     allUSGData.addTo(allUSG);
                 }
@@ -315,7 +313,7 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + unhealthy[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + unhealthy[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
                     allUnhealthyData.addTo(allUnhealthy);
                 }
@@ -337,7 +335,7 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + veryUnhealthy[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + veryUnhealthy[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
                     allVeryUnhealthyData.addTo(allVeryUnhealthy);
                 }
@@ -359,7 +357,7 @@ async function getLocation() {
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM10: ' + hazardous[i].pM10 + '</p>' +
                             '<p class="text-center" style="font-size:13px;font-weight:bold;"> pM2.5: ' + hazardous[i].pM25 + '</p>' +
                             '</div>'
-                        )
+                        );
 
                     allHazardousData.addTo(allHazardous);
                 }
@@ -371,23 +369,18 @@ async function getLocation() {
             async function chart() {
                 const respnseChart = await fetch(api_url);
                 const dataChart = await respnseChart.json();
-                console.log(dataChart)
+                console.log(dataChart);
 
-                const pmDate = []
-                const pm25Value = []
-                const pm10Value = []
+                const pmDate = [];
+                const pm25Value = [];
 
                 for (let i = 0; i < dataChart.length; i++) {
                     const dcDate = dataChart[i].time;
-                    pmDate.push(dcDate)
+                    pmDate.push(dcDate);
                 }
                 for (let i = 0; i < dataChart.length; i++) {
                     const dC25 = dataChart[i].pM25;
-                    pm25Value.push(parseFloat(dC25))
-                }
-                for (let i = 0; i < dataChart.length; i++) {
-                    const dC10 = dataChart[i].pM10;
-                    pm10Value.push(parseFloat(dC10))
+                    pm25Value.push(parseFloat(dC25));
                 }
 
                 var options = {
@@ -526,7 +519,7 @@ async function getLocation() {
 
         }, function (error) {
 
-            location.innerHTML = "Require access to your location to view content of this page"
+            location.innerHTML = "Require access to your location to view content of this page";
             document.getElementById("refreshid").style.display = "block";
             document.getElementById("getGraph").style.display = "none";
             document.getElementById("getMap").style.display = "none";
