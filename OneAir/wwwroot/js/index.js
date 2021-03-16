@@ -141,7 +141,6 @@ async function getLocation() {
 
                 function getColor(pM25) {
 
-                    //@* Adapted from Leaflet(Leaflet, n.d.) *@
                         return pM25 <= 35 ? '#00ff00' :
                         pM25 <= 53 ? '#ffff00' :
                             pM25 <= 58 ? '#ffa500' :
@@ -149,7 +148,6 @@ async function getLocation() {
                                     pM25 <= 70 ? '#800080' :
                                         pM25 >= 71 ? '#800000' :
                                             '#000000';
-                    //@* end of adapted code *@
                 }
 
                 function getText(pM25) {
@@ -166,32 +164,32 @@ async function getLocation() {
 
                 function getImage(pM25) {
 
-                    //@* passing image for pM2.5 between 0 - 35 *@
+                    //passing image for pM2.5 between 0 - 35
 
                         var imgGood = document.createElement('img');
                     imgGood.src = 'img/Good.png';
 
-                    //@* passing image for pM2.5 between 36 - 53 *@
+                    //passing image for pM2.5 between 36 - 53
 
                         var imgModerate = document.createElement('img');
                     imgModerate.src = 'img/Moderate.png';
 
-                    //@* passing image for pM2.5 between 54 - 58 *@
+                    //passing image for pM2.5 between 54 - 58
 
                         var imgUnhealthySensitiveG = document.createElement('img');
                     imgUnhealthySensitiveG.src = 'img/Unhealthy_Sensitive_Group.png';
 
-                    //@* passing image for pM2.5 between 59 - 64 *@
+                    //passing image for pM2.5 between 59 - 64
 
                         var imgUnhealthy = document.createElement('img');
                     imgUnhealthy.src = 'img/Unhealthy.png';
 
-                    //@* passing image for pM2.5 between 65 - 70 *@
+                    //passing image for pM2.5 between 65 - 70
 
                         var imgVeryUnhealthy = document.createElement('img');
                     imgVeryUnhealthy.src = 'img/Very_Unhealthy.png';
 
-                    //@* passing image for pM2.5 between 71 - higher *@
+                    //passing image for pM2.5 between 71 - higher
 
                         var imgHazadous = document.createElement('img');
                     imgHazadous.src = 'img/Hazadous.png';
@@ -534,6 +532,3 @@ async function getLocation() {
 
 getLocation();
 
-
-//@* Leaflet. (n.d).Interactive Choropleth Map.
-//Retrieved from https://leafletjs.com/examples/choropleth/*@
