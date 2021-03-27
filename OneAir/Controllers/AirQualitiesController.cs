@@ -21,14 +21,12 @@ namespace OneAir.Controllers
             _context = context;
         }
 
-        // GET: api/AirQualities
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AirQuality>>> GetAirQualities()
         {
             return await _context.AirQualities.ToListAsync();
         }
 
-        // GET: api/AirQualities/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AirQuality>> GetAirQuality(long id)
         {
@@ -42,9 +40,6 @@ namespace OneAir.Controllers
             return airQuality;
         }
 
-        // PUT: api/AirQualities/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAirQuality(long id, AirQuality airQuality)
         {
@@ -74,9 +69,6 @@ namespace OneAir.Controllers
             return NoContent();
         }
 
-        // POST: api/AirQualities
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<AirQuality>> PostAirQuality(AirQuality airQuality)
         {
@@ -86,7 +78,6 @@ namespace OneAir.Controllers
             return CreatedAtAction("GetAirQuality", new { id = airQuality.AirQualityID }, airQuality);
         }
 
-        // DELETE: api/AirQualities/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<AirQuality>> DeleteAirQuality(long id)
         {
