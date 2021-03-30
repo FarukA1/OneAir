@@ -4,7 +4,6 @@ document.getElementById("usgid").style.display = "none";
 document.getElementById("unhealthyid").style.display = "none";
 document.getElementById("veryunhealthyid").style.display = "none";
 document.getElementById("hazardousid").style.display = "none";
-document.getElementById("refreshid").style.display = "none";
 
 function getAllMap() {
     document.getElementById("goodid").style.display = "none";
